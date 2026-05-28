@@ -55,6 +55,8 @@ namespace MzansiTechContractorsPayrollSystem
                 txtDependents.Focus();
                 return;
             }
+
+            CalculateContractorsData(contractorName, hoursWorked, dependents);
         }
 
         private void btnReset_Click(object sender, EventArgs e)
@@ -66,6 +68,34 @@ namespace MzansiTechContractorsPayrollSystem
         private void btnExit_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void CalculateContractorsData(string contractorName, double hoursWorked, int dependents)
+        {
+            try
+            {
+                var _contractor = new Contractor(contractorName, hoursWorked, dependents);
+
+                // Performs the calculations for the contractor
+                double grossPay        = _contractor.CalculateGrossPay();
+                double PAYEDeduction   = _contractor.CalculatePAYE(grossPay);
+                double UIFDeduction    = _contractor.CalculateUIF(grossPay);
+                double membershipFee   = _contractor.CalculateMembershipFee(grossPay);
+                double totalDeductions = _contractor.CalculateTotalDeductions(UIFDeduction, PAYEDeduction, membershipFee);
+                double NetPay          = _contractor.CalculateNetPay(grossPay, totalDeductions);
+
+                // Displays the results
+                txtGrossPay.Text        = $"{grossPay}";
+                txtPAYE.Text            = $"{PAYEDeduction}";
+                txtUIF.Text             = $"{UIFDeduction}";
+                txtMembership.Text      = $"{membershipFee}";
+                txtTotalDeductions.Text = $"{totalDeductions}";
+                txtNetPay.Text          = $"{NetPay}";
+            }
+            catch (Exception ex)
+            {
+                ShowError($"An error occurred while creating new contractor:\n{ex.Message}");
+            }
         }
 
         private static void ShowError(string message)
