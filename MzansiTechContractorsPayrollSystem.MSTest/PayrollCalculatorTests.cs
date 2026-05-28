@@ -63,5 +63,28 @@ namespace MzansiTechContractorsPayrollSystem.MSTest
             Assert.AreEqual(950.00, result, 0.01,
                 "Gross pay for 1 hour should equal the hourly rate R950.00");
         }
+
+        // <----- UNIT TESTS — UIF Deduction ----->
+        [TestMethod]
+        [TestCategory("Unit - UIF")]
+        public void UIF_GrossPay38000_Returns380()
+        {
+            // UIF = 38000 × 0.01 = R380.00
+            var calc   = new PayrollCalculator("John Smith", 40, 0);
+            double uif = calc.CalculateUIF(38000.00);
+            Assert.AreEqual(380.00, uif, 0.01,
+                "UIF on R38,000 gross pay should be R380.00");
+        }
+
+        [TestMethod]
+        [TestCategory("Unit - UIF")]
+        public void UIF_GrossPay152000_Returns1520()
+        {
+            // UIF = 152000 × 0.01 = R1,520.00
+            var calc = new PayrollCalculator("Jane Doe", 160, 0);
+            double uif = calc.CalculateUIF(152000.00);
+            Assert.AreEqual(1520.00, uif, 0.01,
+                "UIF on R152,000 gross pay should be R1,520.00");
+        }
     }
 }
