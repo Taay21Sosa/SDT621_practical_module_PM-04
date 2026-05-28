@@ -161,7 +161,7 @@ namespace MzansiTechContractorsPayrollSystem.MSTest
             // Total  = R14,820
             // Net    = R38,000 - R14,820 = R23,180.00
             var calc = new PayrollCalculator("John Smith", 40, 0);
-            calc.Calculate();
+            calc.CalculateAllDeductions();
             Assert.AreEqual(23180.00, calc.NetPay, 0.01,
                 "Net pay for 40 hours, 0 dependents should be R23,180.00");
         }
@@ -177,7 +177,7 @@ namespace MzansiTechContractorsPayrollSystem.MSTest
             // Total  = R13,727.50
             // Net    = R38,000 - R13,727.50 = R24,272.50
             var calc = new PayrollCalculator("Jane Doe", 40, 2);
-            calc.Calculate();
+            calc.CalculateAllDeductions();
             Assert.AreEqual(24272.50, calc.NetPay, 0.01,
                 "Net pay for 40 hours, 2 dependents should be R24,272.50");
         }
@@ -259,7 +259,7 @@ namespace MzansiTechContractorsPayrollSystem.MSTest
         {
             // Verify that hours entered by user reach gross pay calculation correctly
             var calc = new PayrollCalculator("Integration User", 80, 0);
-            calc.Calculate();
+            calc.CalculateAllDeductions();
             // 80 hours × R950 = R76,000
             Assert.AreEqual(76000.00, calc.GrossPay, 0.01,
                 "Hours entered must be correctly passed to gross pay calculation.");
@@ -271,7 +271,7 @@ namespace MzansiTechContractorsPayrollSystem.MSTest
         {
             // Verify that gross pay feeds correctly into UIF, PAYE, and membership
             var calc = new PayrollCalculator("Integration User", 80, 0);
-            calc.Calculate();
+            calc.CalculateAllDeductions();
 
             double expectedGross      = 76000.00;
             double expectedUIF        = expectedGross * 0.01;             // R760
@@ -289,7 +289,7 @@ namespace MzansiTechContractorsPayrollSystem.MSTest
         {
             // Verify total deductions is the correct sum of UIF + PAYE + Membership
             var calc = new PayrollCalculator("Integration User", 80, 1);
-            calc.Calculate();
+            calc.CalculateAllDeductions();
 
             double expectedTotal = calc.UIFDeduction + calc.PAYEDeduction + calc.MembershipFee;
             Assert.AreEqual(expectedTotal, calc.TotalDeductions, 0.01,
@@ -302,7 +302,7 @@ namespace MzansiTechContractorsPayrollSystem.MSTest
         {
             // Verify that net pay is correctly derived as gross minus total deductions
             var calc = new PayrollCalculator("Integration User", 80, 2);
-            calc.Calculate();
+            calc.CalculateAllDeductions();
 
             double expectedNet = calc.GrossPay - calc.TotalDeductions;
             Assert.AreEqual(expectedNet, calc.NetPay, 0.01,
@@ -317,10 +317,10 @@ namespace MzansiTechContractorsPayrollSystem.MSTest
             var calc0Dep = new PayrollCalculator("No Dependents", 40, 0);
             var calc3Dep = new PayrollCalculator("3 Dependents",  40, 3);
 
-            calc0Dep.Calculate();
-            calc3Dep.Calculate();
+            calc0Dep.CalculateAllDeductions();
+            calc3Dep.CalculateAllDeductions();
 
-            Assert.IsTrue(calc3Dep.PAYEDeduction < calc0Dep.PAYEDeduction,
+            Assert.IsLessThan(calc0Dep.PAYEDeduction, calc3Dep.PAYEDeduction,
                 "More dependents must result in a lower PAYE deduction.");
         }
     }
