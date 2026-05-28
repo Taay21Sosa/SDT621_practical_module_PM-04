@@ -6,6 +6,7 @@ namespace MzansiTechContractorsPayrollSystem.Models
 {
     public class PayrollCalculator
     {
+        // Business constants - defined once to prevent magic numbers in code
         public const double HOURLY_RATE = 950.00;
         public const double UIF_RATE = 0.01;
         public const double PAYE_RATE = 0.25;
@@ -13,9 +14,18 @@ namespace MzansiTechContractorsPayrollSystem.Models
         public const double MEMBERSHIP_RATE = 0.13;
         public const int MAX_DEPENDENTS = 10;
 
+        // Object attributes/properties
         public string ContractorName { get; private set; }
         public double HoursWorked { get; private set; }
         public int Dependents { get; private set; }
+
+        // Calculated results (populated after Calculate() is called)
+        public double GrossPay       { get; private set; }
+        public double UIFDeduction   { get; private set; }
+        public double PAYEDeduction  { get; private set; }
+        public double MembershipFee  { get; private set; }
+        public double TotalDeductions { get; private set; }
+        public double NetPay         { get; private set; }
 
         public PayrollCalculator(string contractorName, double hoursWorked, int dependents)
         {
@@ -89,6 +99,20 @@ namespace MzansiTechContractorsPayrollSystem.Models
         public double CalculateNetPay(double grossPay, double totalDeductions)
         {
             return Math.Round(grossPay - totalDeductions, 2);
+        }
+
+        /*
+         * Runs all payroll calculations and populates the result properties.
+         * Call this method after constructing the object to obtain all values.
+         */
+        public void CalculateAllDeductions()
+        {
+            GrossPay        = CalculateGrossPay();
+            UIFDeduction    = CalculateUIF(GrossPay);
+            PAYEDeduction   = CalculatePAYE(GrossPay);
+            MembershipFee   = CalculateMembershipFee(GrossPay);
+            TotalDeductions = CalculateTotalDeductions(UIFDeduction, PAYEDeduction, MembershipFee);
+            NetPay          = CalculateNetPay(GrossPay, TotalDeductions);
         }
     }
 }

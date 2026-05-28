@@ -75,22 +75,23 @@ namespace MzansiTechContractorsPayrollSystem
             try
             {
                 var _contractor = new PayrollCalculator(contractorName, hoursWorked, dependents);
+                _contractor.CalculateAllDeductions();
 
                 // Performs the calculations for the contractor
-                double grossPay        = _contractor.CalculateGrossPay();
-                double PAYEDeduction   = _contractor.CalculatePAYE(grossPay);
-                double UIFDeduction    = _contractor.CalculateUIF(grossPay);
-                double membershipFee   = _contractor.CalculateMembershipFee(grossPay);
-                double totalDeductions = _contractor.CalculateTotalDeductions(UIFDeduction, PAYEDeduction, membershipFee);
-                double NetPay          = _contractor.CalculateNetPay(grossPay, totalDeductions);
+                // double grossPay        = _contractor.CalculateGrossPay();
+                // double PAYEDeduction   = _contractor.CalculatePAYE(grossPay);
+                // double UIFDeduction    = _contractor.CalculateUIF(grossPay);
+                // double membershipFee   = _contractor.CalculateMembershipFee(grossPay);
+                // double totalDeductions = _contractor.CalculateTotalDeductions(UIFDeduction, PAYEDeduction, membershipFee);
+                // double NetPay          = _contractor.CalculateNetPay(grossPay, totalDeductions);
 
                 // Displays the results
-                txtGrossPay.Text        = $"{grossPay}";
-                txtPAYE.Text            = $"{PAYEDeduction}";
-                txtUIF.Text             = $"{UIFDeduction}";
-                txtMembership.Text      = $"{membershipFee}";
-                txtTotalDeductions.Text = $"{totalDeductions}";
-                txtNetPay.Text          = $"{NetPay}";
+                txtGrossPay.Text        = $"R {_contractor.GrossPay:N2}";
+                txtPAYE.Text            = $"R {_contractor.PAYEDeduction:N2}";
+                txtUIF.Text             = $"R {_contractor.UIFDeduction:N2}";
+                txtMembership.Text      = $"R {_contractor.MembershipFee:N2}";
+                txtTotalDeductions.Text = $"R {_contractor.TotalDeductions:N2}";
+                txtNetPay.Text          = $"R {_contractor.NetPay:N2}";
             }
             catch (Exception ex)
             {
