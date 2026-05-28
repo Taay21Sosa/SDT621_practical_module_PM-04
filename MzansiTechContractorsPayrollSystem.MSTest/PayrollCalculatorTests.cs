@@ -119,10 +119,33 @@ namespace MzansiTechContractorsPayrollSystem.MSTest
             // PAYE = (38000 - (38000 × 0.0575 × 10)) × 0.25
             //      = (38000 - 21850) × 0.25
             //      = 16150 × 0.25 = R4,037.50
-            var calc    = new PayrollCalculator("Max Allowance", 40, 10);
+            var calc = new PayrollCalculator("Max Allowance", 40, 10);
             double paye = calc.CalculatePAYE(38000.00);
             Assert.AreEqual(4037.50, paye, 0.01,
                 "PAYE with 10 dependents on R38,000 should be R4,037.50");
+        }
+
+        // <----- UNIT TESTS — Membership Fee ----->
+        [TestMethod]
+        [TestCategory("Unit - Membership")]
+        public void Membership_GrossPay38000_Returns4940()
+        {
+            // Membership = 38000 × 0.13 = R4,940.00
+            var calc   = new PayrollCalculator("John Smith", 40, 0);
+            double fee = calc.CalculateMembershipFee(38000.00);
+            Assert.AreEqual(4940.00, fee, 0.01,
+                "Membership fee on R38,000 should be R4,940.00");
+        }
+
+        [TestMethod]
+        [TestCategory("Unit - Membership")]
+        public void Membership_GrossPay152000_Returns19760()
+        {
+            // Membership = 152000 × 0.13 = R19,760.00
+            var calc   = new PayrollCalculator("Jane Doe", 160, 0);
+            double fee = calc.CalculateMembershipFee(152000.00);
+            Assert.AreEqual(19760.00, fee, 0.01,
+                "Membership fee on R152,000 should be R19,760.00");
         }
     }
 }
