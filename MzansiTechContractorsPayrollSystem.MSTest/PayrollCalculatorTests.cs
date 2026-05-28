@@ -142,10 +142,111 @@ namespace MzansiTechContractorsPayrollSystem.MSTest
         public void Membership_GrossPay152000_Returns19760()
         {
             // Membership = 152000 × 0.13 = R19,760.00
-            var calc   = new PayrollCalculator("Jane Doe", 160, 0);
+            var calc = new PayrollCalculator("Jane Doe", 160, 0);
             double fee = calc.CalculateMembershipFee(152000.00);
             Assert.AreEqual(19760.00, fee, 0.01,
                 "Membership fee on R152,000 should be R19,760.00");
+        }
+
+
+        // <----- UNIT TESTS — Net Pay ----->        
+        [TestMethod]
+        [TestCategory("Unit - NetPay")]
+        public void NetPay_40Hours_0Dependents_CorrectAmount()
+        {
+            // Gross  = R38,000
+            // UIF    = R380
+            // PAYE   = R9,500
+            // Member = R4,940
+            // Total  = R14,820
+            // Net    = R38,000 - R14,820 = R23,180.00
+            var calc = new PayrollCalculator("John Smith", 40, 0);
+            calc.Calculate();
+            Assert.AreEqual(23180.00, calc.NetPay, 0.01,
+                "Net pay for 40 hours, 0 dependents should be R23,180.00");
+        }
+
+        [TestMethod]
+        [TestCategory("Unit - NetPay")]
+        public void NetPay_40Hours_2Dependents_CorrectAmount()
+        {
+            // Gross  = R38,000
+            // UIF    = R380
+            // PAYE   = R8,407.50
+            // Member = R4,940
+            // Total  = R13,727.50
+            // Net    = R38,000 - R13,727.50 = R24,272.50
+            var calc = new PayrollCalculator("Jane Doe", 40, 2);
+            calc.Calculate();
+            Assert.AreEqual(24272.50, calc.NetPay, 0.01,
+                "Net pay for 40 hours, 2 dependents should be R24,272.50");
+        }
+
+        // <----- UNIT TESTS — Input Validation (Exception Testing) ----->
+        [TestMethod]
+        [TestCategory("Unit - Validation")]
+        // [ExpectedException(typeof(ArgumentException))]
+        public void Constructor_EmptyName_ThrowsArgumentException()
+        {
+            // Arrange & Act & Assert
+            // An empty contractor name must throw ArgumentException
+            Assert.ThrowsExactly<ArgumentException>(() => new PayrollCalculator("", 40, 0));
+        }
+
+        [TestMethod]
+        [TestCategory("Unit - Validation")]
+        // [ExpectedException(typeof(ArgumentException))]
+        public void Constructor_WhitespaceName_ThrowsArgumentException()
+        {
+            // Arrange & Act & Assert
+            // Whitespace-only name must be rejected
+            Assert.ThrowsExactly<ArgumentException>(() => new PayrollCalculator("   ", 40, 0));
+        }
+
+        [TestMethod]
+        [TestCategory("Unit - Validation")]
+        // [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void Constructor_NegativeHours_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange & Act & Assert
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new PayrollCalculator("Test User", -5, 0));
+        }
+
+        [TestMethod]
+        [TestCategory("Unit - Validation")]
+        // [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void Constructor_ZeroHours_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange & Act & Assert
+            // Zero hours is not a valid working period
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new PayrollCalculator("Test User", 0, 0));
+        }
+
+        [TestMethod]
+        [TestCategory("Unit - Validation")]
+        // [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void Constructor_NegativeDependents_ThrowsArgumentOutOfRangeException()
+        {
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new PayrollCalculator("Test User", 40, -1));
+        }
+
+        [TestMethod]
+        [TestCategory("Unit - Validation")]
+        // [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void Constructor_Dependents11_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange & Act & Assert
+            // 11 dependents exceeds the maximum limit of 10
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new PayrollCalculator("Test User", 40, 11));
+        }
+
+        [TestMethod]
+        [TestCategory("Unit - Validation")]
+        public void Constructor_ValidInputs_DoesNotThrow()
+        {
+            // Boundary: exactly 10 dependents must be accepted
+            var calc = new PayrollCalculator("Valid User", 40, 10);
+            Assert.IsNotNull(calc);
         }
     }
 }
