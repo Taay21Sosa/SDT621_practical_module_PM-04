@@ -86,5 +86,43 @@ namespace MzansiTechContractorsPayrollSystem.MSTest
             Assert.AreEqual(1520.00, uif, 0.01,
                 "UIF on R152,000 gross pay should be R1,520.00");
         }
+
+        // <----- UNIT TESTS — PAYE Deduction ----->
+        [TestMethod]
+        [TestCategory("Unit - PAYE")]
+        public void PAYE_NoDependents_40Hours_CorrectAmount()
+        {
+            // PAYE = (38000 - (38000 × 0.0575 × 0)) × 0.25 = 38000 × 0.25 = R9,500.00
+            var calc    = new PayrollCalculator("John Smith", 40, 0);
+            double paye = calc.CalculatePAYE(38000.00);
+            Assert.AreEqual(9500.00, paye, 0.01,
+                "PAYE with 0 dependents on R38,000 should be R9,500.00");
+        }
+
+        [TestMethod]
+        [TestCategory("Unit - PAYE")]
+        public void PAYE_2Dependents_40Hours_ReducedAmount()
+        {
+            // PAYE = (38000 - (38000 × 0.0575 × 2)) × 0.25
+            //      = (38000 - 4370) × 0.25
+            //      = 33630 × 0.25 = R8,407.50
+            var calc    = new PayrollCalculator("Jane Doe", 40, 2);
+            double paye = calc.CalculatePAYE(38000.00);
+            Assert.AreEqual(8407.50, paye, 0.01,
+                "PAYE with 2 dependents on R38,000 should be R8,407.50");
+        }
+
+        [TestMethod]
+        [TestCategory("Unit - PAYE")]
+        public void PAYE_10Dependents_40Hours_MaxAllowance()
+        {
+            // PAYE = (38000 - (38000 × 0.0575 × 10)) × 0.25
+            //      = (38000 - 21850) × 0.25
+            //      = 16150 × 0.25 = R4,037.50
+            var calc    = new PayrollCalculator("Max Allowance", 40, 10);
+            double paye = calc.CalculatePAYE(38000.00);
+            Assert.AreEqual(4037.50, paye, 0.01,
+                "PAYE with 10 dependents on R38,000 should be R4,037.50");
+        }
     }
 }
