@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MzansiTechContractorsPayrollSystem.Models
 {
-    public class Contractor
+    public class PayrollCalculator
     {
         public const double HOURLY_RATE = 950.00;
         public const double UIF_RATE = 0.01;
@@ -17,7 +17,7 @@ namespace MzansiTechContractorsPayrollSystem.Models
         public double HoursWorked { get; private set; }
         public int Dependents { get; private set; }
 
-        public Contractor(string contractorName, double hoursWorked, int dependents)
+        public PayrollCalculator(string contractorName, double hoursWorked, int dependents)
         {
             // Validates user input before processing the data
             if (string.IsNullOrWhiteSpace(contractorName))

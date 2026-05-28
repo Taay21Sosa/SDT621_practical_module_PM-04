@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="MzansiTechContractorsPayrollSystem.MSTest/MzansiTechContractorsPayrollSystem.MSTest.csproj" Id="c98574f9-b96d-4e38-b349-3d5d90123769" />
   <Project Path="MzansiTechContractorsPayrollSystem/MzansiTechContractorsPayrollSystem.csproj" />
 </Solution>

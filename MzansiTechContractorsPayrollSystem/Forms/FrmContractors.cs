@@ -2,9 +2,9 @@ using MzansiTechContractorsPayrollSystem.Models;
 
 namespace MzansiTechContractorsPayrollSystem
 {
-    public partial class FrmContractorsPayroll : Form
+    public partial class FrmContractors : Form
     {
-        public FrmContractorsPayroll()
+        public FrmContractors()
         {
             InitializeComponent();
         }
@@ -49,9 +49,9 @@ namespace MzansiTechContractorsPayrollSystem
                 return;
             }
 
-            if (dependents > Contractor.MAX_DEPENDENTS)
+            if (dependents > PayrollCalculator.MAX_DEPENDENTS)
             {
-                ShowError($"Number of dependents cannot exceed {Contractor.MAX_DEPENDENTS}.");
+                ShowError($"Number of dependents cannot exceed {PayrollCalculator.MAX_DEPENDENTS}.");
                 txtDependents.Focus();
                 return;
             }
@@ -74,7 +74,7 @@ namespace MzansiTechContractorsPayrollSystem
         {
             try
             {
-                var _contractor = new Contractor(contractorName, hoursWorked, dependents);
+                var _contractor = new PayrollCalculator(contractorName, hoursWorked, dependents);
 
                 // Performs the calculations for the contractor
                 double grossPay        = _contractor.CalculateGrossPay();

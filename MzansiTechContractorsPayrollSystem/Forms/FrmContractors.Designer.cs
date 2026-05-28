@@ -1,6 +1,6 @@
 ﻿namespace MzansiTechContractorsPayrollSystem
 {
-    partial class FrmContractorsPayroll
+    partial class FrmContractors
     {
         /// <summary>
         ///  Required designer variable.
