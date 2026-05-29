@@ -1,7 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Diagnostics.Contracts;
-using MzansiTechContractorsPayrollSystem.Models;
+﻿using MzansiTechContractorsPayrollSystem.Models;
 
 namespace MzansiTechContractorsPayrollSystem.MSTest
 {
